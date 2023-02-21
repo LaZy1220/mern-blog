@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
+
+import authRoute from "./routes/auth.js";
 
 const app = express();
 dotenv.config();
@@ -10,7 +13,13 @@ const PORT = process.env.PORT || 8001;
 const IP = process.env.IP;
 const DB_NAME = process.env.DB_NAME;
 
+//Midleware
+app.use(cors());
+app.use(express.json());
 mongoose.set("strictQuery", false);
+
+//Routes
+app.use("/api/auth", authRoute);
 
 async function start() {
   try {
