@@ -1,4 +1,4 @@
 function App() {
-  return <div>HI!</div>;
+  return <div className="text-2xl text-red-600">HI!</div>;
 }
 export default App;
