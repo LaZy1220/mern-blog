@@ -1,22 +1,35 @@
 import { Link, NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { checkIsAuth, logout } from "../redux/slices/authSlice";
+import { toast } from "react-toastify";
 
 export const NavBar = () => {
-  const isAuth = false;
-  const activeStyle = {
+  const isAuth = useSelector(checkIsAuth);
+  const dispatch = useDispatch();
+
+  const activeStyles = {
     color: "white",
   };
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    window.localStorage.removeItem("token");
+    toast("Вы вышли из системы");
+  };
+
   return (
     <div className="flex py-4 justify-between items-center">
       <span className="flex justify-center items-center w-6 h-6 bg-gray-600 text-xs text-white rounded-sm">
-        L
+        E
       </span>
+
       {isAuth && (
         <ul className="flex gap-8">
           <li>
             <NavLink
               to={"/"}
               className="text-xs text-gray-400 hover:text-white"
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              style={({ isActive }) => (isActive ? activeStyles : undefined)}
             >
               Главная
             </NavLink>
@@ -25,7 +38,7 @@ export const NavBar = () => {
             <NavLink
               to={"/posts"}
               className="text-xs text-gray-400 hover:text-white"
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              style={({ isActive }) => (isActive ? activeStyles : undefined)}
             >
               Мои посты
             </NavLink>
@@ -34,7 +47,7 @@ export const NavBar = () => {
             <NavLink
               to={"/new"}
               className="text-xs text-gray-400 hover:text-white"
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              style={({ isActive }) => (isActive ? activeStyles : undefined)}
             >
               Добавить пост
             </NavLink>
@@ -43,7 +56,11 @@ export const NavBar = () => {
       )}
 
       <div className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm px-4 py-2">
-        {isAuth ? <button>Выйти</button> : <Link to={"/login"}> Войти</Link>}
+        {isAuth ? (
+          <button onClick={logoutHandler}>Выйти</button>
+        ) : (
+          <Link to={"/login"}> Войти </Link>
+        )}
       </div>
     </div>
   );
