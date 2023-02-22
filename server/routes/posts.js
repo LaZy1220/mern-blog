@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { createPost } from "../controllers/posts.js";
-import { getAll } from "../controllers/posts.js";
-import { getById } from "../controllers/posts.js";
-import { removePost } from "../controllers/posts.js";
-import { getMyPosts } from "../controllers/posts.js";
+import {
+  createPost,
+  getAll,
+  getById,
+  removePost,
+  getMyPosts,
+  updatePost,
+} from "../controllers/posts.js";
 import { checkAuth } from "../utils/checkAuth.js";
 
 const router = new Router();
@@ -16,7 +19,9 @@ router.get("/", getAll);
 router.get("/:id", getById);
 //Get My Posts
 router.get("/user/me", checkAuth, getMyPosts);
-//Remove Posts
+//Remove Post
 router.delete("/:id", checkAuth, removePost);
+//Update Post
+router.put("/:id", checkAuth, updatePost);
 
 export default router;

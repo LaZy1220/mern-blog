@@ -80,6 +80,7 @@ export const getMyPosts = async (req, res) => {
     res.json({ message: "Что-то пошло не так" });
   }
 };
+//Remove post
 export const removePost = async (req, res) => {
   try {
     const post = await Post.findByIdAndDelete(req.params.id);
@@ -90,6 +91,25 @@ export const removePost = async (req, res) => {
       $pull: { posts: req.params.id },
     });
     res.json({ message: "Пост был удален" });
+  } catch (error) {
+    res.json({ message: "Что-то пошло не так" });
+  }
+};
+//Update post
+export const updatePost = async (req, res) => {
+  try {
+    const { title, text, id } = req.body;
+    const post = await Post.findById(id);
+    if (req.files) {
+      let fileName = Date.now().toString + req.files.image.name;
+      const __dirname = dirname(fileURLToPath(import.meta.url));
+      req.files.image.mv(path.join(__dirname, "..", "uploads", fileName));
+      post.imgUrl = fileName || "";
+    }
+    post.title = title;
+    post.text = text;
+    await post.save();
+    res.json(post);
   } catch (error) {
     res.json({ message: "Что-то пошло не так" });
   }
